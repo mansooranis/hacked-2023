@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const MessagesSchema = new mongoose.Schema(
     {
         message: {
@@ -7,10 +9,12 @@ const MessagesSchema = new mongoose.Schema(
         upvote: {
             type: Number,
             required: true,
+            default: 1,
         },
         downvote: {
             type: Number,
             required: true,
+            default: 0,
         },
         answered: {
             type: Boolean,
