@@ -2,5 +2,9 @@ Message = {
     id : string,
     roomID: string,
     message:string,
+    sender: string(username)
+    timestamp: date,
 }
+
+
 
