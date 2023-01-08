@@ -21,16 +21,27 @@ export default function Home() {
     const dispatch = useDispatch();
     const roomcodenum = useSelector((state) => state.room["room"]);
     const navigate = useNavigate()
+    const makeid = () => {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < 5; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
     const createRoom = useCallback(() =>{
-      try{
-        const response = axios.get(`${URL}/api/rooms/create`).then((res) => {
-          dispatch(setRoom(res.data["roomCode"]));
-          navigate(`/${res.data["roomCode"]}`)
-        });
+      const roomCode = makeid();
+      navigate(`/${roomCode}`)
+      // try{
+      //   const response = axios.get(`${URL}/api/rooms/create`).then((res) => {
+      //     dispatch(setRoom(res.data["roomCode"]));
+      //     navigate(`/${res.data["roomCode"]}`)
+      //   });
         
-      }catch(e){
-        console.log(e)
-      }
+      // }catch(e){
+      //   console.log(e)
+      // }
     }, []);
   return (
     <div className = {`${theme}`}>

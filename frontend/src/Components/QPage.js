@@ -14,34 +14,43 @@ export default function Questions(){
     const [showthemesg, setShowthemesg] = useState([])
     //console.log(roomcodenum);
     const [isConnected, setIsConnected] = useState(false);
+
     useEffect(() => {
         const socket = socketIOClient(WS);
-        //console.log(roomcodenum)
-        socket.on('connection', () => {
+        socket.on("connect", () => {
             setIsConnected(true);
-          });
-        socket.emit("join-room", roomcodenum, (result) => {
-            const msgs = result.map((message) => {
-                return <Question question={message["value"]} total={message["score"]} username = "me"/>
-            })
-            setShowthemesg(msgs)
+            console.log("connected");
         })
-    },[])
+        socket.emit("all-messages", roomcodenum, (res) => {
+            setMessages(res.data);
+        })
+        //socket.emit("new-question", {"hi":"hello"});
+
+}, [])
     useEffect(() => {
-        const msgs = messages.map((message) => {
-            return <Question question={message["value"]} total={message["score"]} username = "me"/>
-        })
-        setShowthemesg(msgs)
+        const arr = messages.map(
+            (message) => {
+                return <Question message={message.message} messageid={message.messageid} sender={message.sender} score={message.score}/>
+            }
+        )
+        setShowthemesg(arr)
     },[messages])
     const submitQue =  React.useCallback( async () => {
         const socket = socketIOClient(WS);
-        socket.emit("new-question", {roomCode: roomcodenum, message: message}, (result) => {
-            console.log(result,"hello");
-        }   )
-        socket.on("new-question", (result) => {
-            console.log(result);
-            setMessages(result);
-        }   )
+        socket.emit("new-question", {roomCode: roomcodenum, message: message, "messageid":Math.floor(Math.random() * 100000), sender:"mansoor", score:1}, 
+        (response) => {
+            console.log(response.data);
+            setMessages(response.data);
+        });
+        //socket.on("all-messages", result => console.log(result,"hi"))
+        // const socket = socketIOClient(WS);
+        // socket.emit("new-question", {roomCode: roomcodenum, message: message}, (result) => {
+        //     console.log(result,"hello");
+        // }   )
+        // socket.on("new-question", (result) => {
+        //     console.log(result);
+        //     setMessages(result);
+        // }   )
     })
     return (
         <div className="flex flex-row h-full w-full bg-[#BFEAF5]">
