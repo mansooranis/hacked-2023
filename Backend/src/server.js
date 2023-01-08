@@ -29,21 +29,6 @@ run()
 var db = mongoose.connection // get the connection
 db.on('error', console.error.bind(console, 'connection error:'))
 
-// app.get("/", async (req, res) => {
-//     res.sendFile(__dirname + "/index.html");
-// });
-
-// Testing Code
-// io.on("connection", async (socket) => {
-//     await redisClient.connect();
-//     socket.on("chat message", async(msg) => {
-//         redisClient.zAdd("chat", {score: 3, value: msg});
-//         io.emit("chat message", msg);
-//         const result = await redisClient.ZRANGE_WITHSCORES("chat", 0, -1,  {REV: true});
-//         console.log(result);
-//     });
-// });
-
 let users = [];
 
 io.on('connection', async (socket) => {
