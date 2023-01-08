@@ -12,12 +12,17 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
+import Questions from './Components/QPage';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
+  {
+    path: "/:roomCode",
+    element:<Questions/>,
+  }
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

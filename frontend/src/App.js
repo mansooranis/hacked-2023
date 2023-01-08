@@ -1,6 +1,8 @@
 import './App.css';
 import Home from './Components/Home';
+
 import { useSelector } from 'react-redux'
+import Questions from './Components/QPage';
 function App() {
   const theme = useSelector((state) => state.theme.theme);
   return (

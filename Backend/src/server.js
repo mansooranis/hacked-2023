@@ -1,7 +1,7 @@
 const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 const Redis = require("redis");
 const cors = require('cors')({origin: true})
 const mongoose = require("mongoose");
@@ -32,6 +32,7 @@ db.on('error', console.error.bind(console, 'connection error:'))
 let users = [];
 
 io.on('connection', async (socket) => {
+    console.log('a user connected');
     socket.on("join-server", (username) => {
         const user = {
             id: socket.id,
