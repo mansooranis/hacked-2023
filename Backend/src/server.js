@@ -1,12 +1,17 @@
 const app = require("express")();
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
-const port = process.env.PORT || 8000;
+const io = require("socket.io")(http, {
+    cors: {
+        origin: "http://localhost:3000",
+    },
+});
+const port = process.env.PORT || 8080;
 const Redis = require("redis");
 const cors = require('cors')({origin: true})
 const mongoose = require("mongoose");
 const express = require('express')
 const dotenv = require('dotenv')
+// const { createProxyMiddleware } = require('http-proxy-middleware');
 dotenv.config()
 const roomsRouter = require('./routes/Room')
 
@@ -69,6 +74,7 @@ io.on('connection', async (socket) => {
 
 app.use(cors)
 app.use(express.json())
+// app.use('/', createProxyMiddleware({ target: 'http://localhost:3000', changeOrigin: true }));
 app.get('/test_db_conn', (req, res) => {
     // test db connection
     res.json({ status: db.readyState, database: db.name })
