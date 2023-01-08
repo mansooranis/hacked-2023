@@ -20,8 +20,8 @@ export default function Home() {
     const [roomid, setRoomid] = useState("");
     const dispatch = useDispatch();
     const roomcodenum = useSelector((state) => state.room["room"]);
-    const navigate = useNavigate();
-    const createRoom = useCallback(async () =>{
+    const navigate = useNavigate()
+    const createRoom = useCallback(() =>{
       try{
         const response = axios.get(`${URL}/api/rooms/create`).then((res) => {
           dispatch(setRoom(res.data["roomCode"]));

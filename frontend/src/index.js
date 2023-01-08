@@ -7,29 +7,12 @@ import { store } from './store'
 import { Provider } from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import "./index.css";
-import Questions from './Components/QPage';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/:roomCode",
-    element:<Questions/>,
-  }
-]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <div className='h-screen w-screen'>
-        <RouterProvider router={router}/>
+        <App/>
       </div>
     </Provider>
   </React.StrictMode>

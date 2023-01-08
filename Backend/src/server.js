@@ -50,12 +50,13 @@ io.on('connection', async (socket) => {
         socket.join(roomCode);
         const result = await redisClient.ZRANGE_WITHSCORES(roomCode, 0, -1,  {REV: true});
         cb(result);
+        io.emit("join-room", result);
     })
 
     socket.on("new-question", async({roomCode, message}) => {
         redisClient.zAdd(roomCode, {score: 1, value: message})
         const result = await redisClient.ZRANGE_WITHSCORES(roomCode, 0, -1,  {REV: true});
-        io.to(roomCode).emit("new-question", result);
+        io.emit("new-question", result);
     })
 
     socket.on("upvote-question", async({roomCode, message, upvote}) =>{
