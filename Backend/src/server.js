@@ -13,6 +13,7 @@ const roomsRouter = require('./routes/Room')
 const redisClient = Redis.createClient();
 
 const run = async () => {
+    await redisClient.connect(); // connect to redis
     await mongoose
         .connect(process.env.MONGO_URI, {
             // connect to mongoDB
@@ -28,20 +29,42 @@ run()
 var db = mongoose.connection // get the connection
 db.on('error', console.error.bind(console, 'connection error:'))
 
-// app.get("/", async (req, res) => {
-//     res.sendFile(__dirname + "/index.html");
-// });
+let users = [];
 
-// Testing Code
-// io.on("connection", async (socket) => {
-//     await redisClient.connect();
-//     socket.on("chat message", async(msg) => {
-//         redisClient.zAdd("chat", {score: 3, value: msg});
-//         io.emit("chat message", msg);
-//         const result = await redisClient.ZRANGE_WITHSCORES("chat", 0, -1,  {REV: true});
-//         console.log(result);
-//     });
-// });
+io.on('connection', async (socket) => {
+    socket.on("join-server", (username) => {
+        const user = {
+            id: socket.id,
+            username: username,
+        };
+        users.push(user);
+    })
+
+    socket.on("join-room", async(roomCode, cb) => {
+        socket.join(roomCode);
+        const result = await redisClient.ZRANGE_WITHSCORES(roomCode, 0, -1,  {REV: true});
+        cb(result);
+    })
+
+    socket.on("new-question", async({roomCode, message}) => {
+        redisClient.zAdd(roomCode, {score: 1, value: message})
+        const result = await redisClient.ZRANGE_WITHSCORES(roomCode, 0, -1,  {REV: true});
+        io.to(roomCode).emit("new-question", result);
+    })
+
+    socket.on("upvote-question", async({roomCode, message, upvote}) =>{
+        redisClient.zAdd(roomCode, {score: upvote, value: message})
+        const result = await redisClient.ZRANGE_WITHSCORES(roomCode, 0, -1,  {REV: true});
+        io.to(roomCode).emit("upvote-question", result);
+    })
+
+    socket.on("downvote-question", async({roomCode, message, downvote}) =>{
+        redisClient.zAdd(roomCode, {score: downvote, value: message})
+        const result = await redisClient.ZRANGE_WITHSCORES(roomCode, 0, -1,  {REV: true});
+        io.to(roomCode).emit("downvote-question", result);
+    })
+
+});
 
 app.use(cors)
 app.use(express.json())
