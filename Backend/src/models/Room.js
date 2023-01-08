@@ -3,7 +3,8 @@ const RoomSchema = new mongoose.Schema(
         RoomCode: {
             type: String,
             required: true,
-            length: 5,
+            minlength: 5,
+            maxlength: 5,
         },
     },
     { collection: 'rooms', versionKey: false }
