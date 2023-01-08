@@ -1,0 +1,6 @@
+Message = {
+    id : string,
+    roomID: string,
+    message:string,
+}
+
