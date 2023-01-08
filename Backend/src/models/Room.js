@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const RoomSchema = new mongoose.Schema(
     {
-        RoomCode: {
+        roomCode: {
             type: String,
             required: true,
             minLength: 5,

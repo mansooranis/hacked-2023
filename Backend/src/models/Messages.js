@@ -23,7 +23,7 @@ const MessagesSchema = new mongoose.Schema(
         },
         
     },
-    { collection: 'Messages', versionKey: false }
+    { collection: 'messages', versionKey: false }
 )
 
 module.exports = mongoose.model('hacked', MessagesSchema)
