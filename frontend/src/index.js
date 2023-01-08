@@ -3,11 +3,30 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { store } from './store'
+import { Provider } from 'react-redux'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import "./index.css";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <div className='h-screen w-screen'>
+        <RouterProvider router={router}/>
+      </div>
+    </Provider>
   </React.StrictMode>
 );
 
